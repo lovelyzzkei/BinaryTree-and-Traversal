@@ -1,0 +1,87 @@
+#include<iostream>
+using namespace std;
+
+// 트리 구현을 위한 node를 구조체로 선언
+typedef struct node* treePointer;
+struct node {
+	char data;
+	treePointer leftChild, rightChild;
+};
+
+// 순회 함수를 선언
+void preorder(treePointer ptr);
+void inorder(treePointer ptr);
+void postorder(treePointer ptr);
+
+int main() {
+	cin.tie(NULL);
+	cin.sync_with_stdio(false);
+	cout.sync_with_stdio(false);
+
+	int n, t = 1;
+	char alphabet[30], templeft[30], tempright[30];
+	char data, left, right;
+	node tree[30];
+	cin >> n;
+
+	// 간선 연결을 위한 알파벳 배열
+	for (int i = 1; i <= 26; i++) {
+		alphabet[i] = 65 + i;
+	}
+
+	// 노드들에 정보 입력,
+	for (int i = 1; i <= n; i++) {
+		cin >> data >> left >> right;
+		templeft[i] = left;
+		tempright[i] = right;
+		tree[i].data = data;
+		tree[i].leftChild = NULL;
+		tree[i].rightChild = NULL;
+	}
+	// 노드들을 연결
+	for (int i = 1; i <= n; i++) {
+		if (templeft[i] != '.') {
+			while (tree[t].data != templeft[i]) {
+				t++;
+			}
+			tree[i].leftChild = &tree[t];
+			t = 1;
+		}
+		if (tempright[i] != '.') {
+			while (tree[t].data != tempright[i]) {
+				t++;
+			}
+			tree[i].rightChild = &tree[t];
+			t = 1;
+		}
+	}
+	preorder(&tree[1]);
+	cout << "\n";
+	inorder(&tree[1]);
+	cout << "\n";
+	postorder(&tree[1]);
+	cout << "\n";
+	return 0;
+}
+
+void preorder(treePointer ptr) {
+	if (ptr) {
+		cout << ptr->data;
+		preorder(ptr->leftChild);
+		preorder(ptr->rightChild);
+	}
+}
+void inorder(treePointer ptr) {
+	if (ptr) {
+		inorder(ptr->leftChild);
+		cout << ptr->data;
+		inorder(ptr->rightChild);
+	}
+}
+void postorder(treePointer ptr) {
+	if (ptr) {
+		postorder(ptr->leftChild);
+		postorder(ptr->rightChild);
+		cout << ptr->data;
+	}
+}
